@@ -11,7 +11,10 @@
    ```
    > npm install
    ```
-1. Edit the configurations in /config
+1. Edit the configurations in /config, then run this command to prevent your changes from being pushed
+   ```
+   > git update-index --skip-worktree config
+   ```
 1. Start Bear Bot
    ```
    > npm run start
