@@ -65,4 +65,4 @@ jobs:
           npm ci --prefer-offline --no-audit --no-optional
 
       - name: Run ESLint Tests
-        run: npm run eslint
+        run: npm run lint
