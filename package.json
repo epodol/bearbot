@@ -8,11 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
-    "docker:build": "docker build -t epodol/bearbot:$npm_package_version .",
-    "docker:save": "docker save -o ./dist/bearbot-$npm_package_version.tar epodol/bearbot:$npm_package_version",
-    "docker:run": "docker run -d --env-file ./config epodol/bearbot:$npm_package_version",
-    "docker:load": "docker load -i ./dist/bearbot-$npm_package_version.tar"
+    "prettier:fix": "prettier --write ."
   },
   "repository": {
     "type": "git",
