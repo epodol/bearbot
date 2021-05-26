@@ -1,0 +1,27 @@
+# --<[CONFIGUATION]>-- #
+
+
+
+# [REQUIRED VALUES]
+
+# This is your bot's token.
+# This can be found at https://discord.com/developers/applications > [Bot Name] > Bot > TOKEN > Copy
+
+TOKEN=
+
+
+# [BOT OPTIONS]
+
+# Default color to use for command embeds.
+# Default: #0099ff
+
+BOT_COLOR=
+
+
+# [DEVELOPMENT OPTIONS]
+
+
+# The Server ID of your testing server
+# Make sure developer mode is enabled, then right click on the server and press "Copy ID"
+
+DEV_SERVER_ID=
