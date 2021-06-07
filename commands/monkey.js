@@ -1,11 +1,6 @@
 module.exports = {
   name: 'monkey',
-  description: "Display the current bot's version.",
-  aliases: ['mmm', 'mmmmm'],
-  usage: '',
-  cooldown: 0,
-  guildOnly: false,
-  permissions: '',
+  description: 'Mmmmm Monkey',
   execute() {
     const response = {
       data: {

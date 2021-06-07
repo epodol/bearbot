@@ -4,15 +4,9 @@ const Discord = require('discord.js');
 module.exports = {
   name: 'rps',
   description: 'Plays rock paper scissors.',
-  aliases: ['rpsgame', 'rockpaperscissors'],
-  usage: '[rock|paper|scissors]',
-  cooldown: 0,
-  guildOnly: false,
-  permissions: '',
-  args: true,
   options: [
     {
-      name: 'agrs',
+      name: 'choice',
       description: 'Rock, Paper, or Scissors',
       type: 3,
       required: true,
@@ -33,14 +27,6 @@ module.exports = {
     },
   ],
   execute(args) {
-    // if (
-    //   args[0].value.toLowerCase() !== "rock" &&
-    //   args[0].value.toLowerCase() !== "paper" &&
-    //   args[0].value.toLowerCase() !== "scissors"
-    // )
-    //   return message.reply(
-    //     `Invalid arguments!\n The proper usage would be: \`${process.env.USER_PREFIX}rps [rock|paper|scissors]\``
-    //   );
     let result = {};
     if (args[0].value === 'rock') {
       switch (Math.floor(Math.random() * 3)) {
