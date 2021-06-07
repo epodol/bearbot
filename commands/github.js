@@ -1,10 +1,6 @@
 module.exports = {
   name: 'github',
   description: "Display the bot's GitHub URL.",
-  usage: '',
-  cooldown: 0,
-  guildOnly: false,
-  permissions: '',
   execute() {
     const response = {
       data: {

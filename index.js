@@ -4,7 +4,10 @@ const Discord = require('discord.js');
 
 const client = new Discord.Client({
   presence: {
-    activity: { name: 'Slash Commands', type: 'WATCHING' },
+    activity: {
+      name: process.env.ACTIVITY_NAME || 'Bear Bot',
+      type: process.env.ACTIVITY_TYPE || 'PLAYING',
+    },
     status: 'online',
   },
 });
@@ -30,6 +33,9 @@ client.once('ready', () => {
       .applications(client.user.id)
       .guilds(process.env.DEV_SERVER_ID)
       .commands.get()
+      .catch((err) => {
+        console.log(err);
+      })
       .then((commands) => {
         commands.forEach((command) => {
           if (!client.commands.has(command.name)) {
@@ -38,7 +44,11 @@ client.once('ready', () => {
               .applications(client.user.id)
               .guilds(process.env.DEV_SERVER_ID)
               .commands(command.id)
-              .delete();
+              .delete()
+              .catch((err) => {
+                console.log(err);
+                console.log(command);
+              });
           }
         });
       })
@@ -53,6 +63,10 @@ client.once('ready', () => {
                 description: element.description,
                 options: element.options,
               },
+            })
+            .catch((err) => {
+              console.log(err);
+              console.log(element);
             });
         });
       });
@@ -91,11 +105,7 @@ client.ws.on('INTERACTION_CREATE', async (interaction) => {
   const args = interaction.data.options;
 
   // Find command js file
-  const command =
-    client.commands.get(commandName) ||
-    client.commands.find(
-      (cmd) => cmd.aliases && cmd.aliases.includes(commandName)
-    );
+  const command = client.commands.get(commandName);
 
   // Execute command
   const response = await command.execute(
@@ -108,7 +118,9 @@ client.ws.on('INTERACTION_CREATE', async (interaction) => {
   client.api
     .interactions(interaction.id, interaction.token)
     .callback.post(response)
-    .catch((err) => console.log(`NEW ERROR ON CALLBACK POST: ${err}`));
+    .catch((err) =>
+      console.log(`NEW ERROR WHILE RESPONDING TO INTERACTION: ${err}`)
+    );
 });
 
 client.on('message', (message) => {

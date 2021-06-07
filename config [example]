@@ -17,11 +17,22 @@ TOKEN=
 
 BOT_COLOR=
 
+# Bot activity type
+# One of: COMPETING, LISTENING, PLAYING, WATCHING
+# Default: PLAYING
+
+ACTIVITY_TYPE=
+
+# Bot activity name
+# Default: Bear Bot
+
+ACTIVITY_NAME=
 
 # [DEVELOPMENT OPTIONS]
 
 
 # The Server ID of your testing server
 # Make sure developer mode is enabled, then right click on the server and press "Copy ID"
+# Default: Production
 
 DEV_SERVER_ID=
