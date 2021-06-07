@@ -1,6 +1,6 @@
 {
   "name": "bearbot",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The Bear Bot Discord Bot",
   "main": "index.js",
   "scripts": {
