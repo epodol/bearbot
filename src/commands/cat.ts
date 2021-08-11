@@ -1,7 +1,8 @@
-const fetch = require('node-fetch');
-const Discord = require('discord.js');
+import Discord from 'discord.js';
+import fetch from 'node-fetch';
+import Command from '../command';
 
-module.exports = {
+const cat: Command = {
   name: 'cat',
   description: 'Finds a random cat picture.',
   options: [
@@ -53,25 +54,23 @@ module.exports = {
       ],
     },
   ],
-  async execute(args) {
-    // eslint-disable-next-line no-param-reassign
-    args = args || [];
+  async execute(interaction, args, author, commands) {
+    const number = args.getNumber('number');
 
-    let number;
-
-    args.forEach((arg) => {
-      if (arg.name === 'number') number = arg.value;
-    });
+    interface Cat {
+      url: string;
+      [key: string]: any;
+    }
 
     const fetchResponse = await fetch(
       `https://api.thecatapi.com/v1/images/search?limit=${number || '1'}`
     );
-    const data = await fetchResponse.json();
+    const data: Cat[] = await fetchResponse.json();
 
-    const catArray = [];
+    const catArray: Discord.MessageEmbed[] = [];
     data.forEach((cat) => {
       const embed = new Discord.MessageEmbed()
-        .setColor(process.env.BOT_COLOR)
+        .setColor(process.env.BOT_COLOR as any)
         .setTitle('Cat Picture!')
         .setImage(cat.url)
         .setTimestamp();
@@ -89,3 +88,5 @@ module.exports = {
     return response;
   },
 };
+
+export default cat;

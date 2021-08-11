@@ -1,7 +1,9 @@
-module.exports = {
+import Command from '../command';
+
+const github: Command = {
   name: 'github',
   description: "Display the bot's GitHub URL.",
-  execute() {
+  execute(interaction, args, author, commands) {
     const response = {
       data: {
         type: 4,
@@ -14,3 +16,5 @@ module.exports = {
     return response;
   },
 };
+
+export default github;

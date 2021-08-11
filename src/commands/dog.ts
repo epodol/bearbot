@@ -1,7 +1,8 @@
-const fetch = require('node-fetch');
-const Discord = require('discord.js');
+import Discord, { MessageEmbed } from 'discord.js';
+import fetch from 'node-fetch';
+import Command from '../command';
 
-module.exports = {
+const dog: Command = {
   name: 'dog',
   description: 'Finds a random dog picture.',
   options: [
@@ -58,17 +59,14 @@ module.exports = {
       type: 3,
     },
   ],
-  async execute(args) {
-    // eslint-disable-next-line no-param-reassign
-    args = args || [];
+  async execute(interaction, args, author, commands, client) {
+    const breed = args.getString('breed')?.toLowerCase();
+    const number = args.getNumber('number');
 
-    let breed;
-    let number;
-
-    args.forEach((arg) => {
-      if (arg.name === 'breed') breed = arg.value.toLowerCase();
-      if (arg.name === 'number') number = arg.value;
-    });
+    interface Dog {
+      message: string[];
+      status: string;
+    }
 
     const url = breed
       ? `https://dog.ceo/api/breed/${breed}/images/random/${number || 1}`
@@ -76,8 +74,9 @@ module.exports = {
 
     const image = await fetch(url);
 
-    const res = await image.json();
-    if (res?.code === 404) {
+    const res: Dog = await image.json();
+
+    if (res?.status === 'error') {
       const response = {
         data: {
           type: 4,
@@ -89,10 +88,10 @@ module.exports = {
       return response;
     }
     const { message: images } = res;
-    const imageEmbeds = [];
+    const imageEmbeds: MessageEmbed[] = [];
     images.forEach((imageURL) => {
       const embed = new Discord.MessageEmbed()
-        .setColor(process.env.BOT_COLOR)
+        .setColor(process.env.BOT_COLOR as any)
         .setTitle('Dog Picture!')
         .setImage(imageURL)
         .setTimestamp();
@@ -110,3 +109,5 @@ module.exports = {
     return response;
   },
 };
+
+export default dog;

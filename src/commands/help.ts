@@ -1,6 +1,7 @@
-const Discord = require('discord.js');
+import Discord from 'discord.js';
+import Command from '../command';
 
-module.exports = {
+const help: Command = {
   name: 'help',
   description: 'List all of my commands or info about a specific command.',
   options: [
@@ -11,23 +12,20 @@ module.exports = {
       required: false,
     },
   ],
-  async execute(args, author, interaction, client) {
-    const { commands } = client;
-    let returnValue;
-
-    if (typeof args === 'undefined' || args.length === 0) {
+  async execute(interaction, args, author, commands) {
+    if (args.getString('command') === undefined) {
       const commandList = new Discord.MessageEmbed()
-        .setColor(process.env.BOT_COLOR)
+        .setColor(process.env.BOT_COLOR as any)
         .setTitle(`Bear Commands!`)
         .setDescription(
           `Want to suggest a command? Go to https://github.com/epodol/bearbot/issues/new`
         )
         .setTimestamp();
-      commands.map((command) =>
+      commands.map((command: Command) =>
         commandList.addField(`\`${command.name}\``, command.description, false)
       );
 
-      returnValue = {
+      return {
         data: {
           type: 4,
           data: {
@@ -36,17 +34,19 @@ module.exports = {
         },
       };
     } else {
-      const name = args[0].value.toLowerCase();
+      const name = args.getString('command')?.toLowerCase();
       const command =
         commands.get(name) ||
-        commands.find((c) => c.aliases && c.aliases.includes(name));
+        commands.find((c: any) => c.aliases && c.aliases.includes(name));
 
       if (!command) {
-        returnValue = {
+        return {
           data: {
             type: 4,
             data: {
-              content: `The command \`${args[0].value}\` does not exist!`,
+              content: `The command \`${args.getString(
+                'command'
+              )}\` does not exist!`,
             },
           },
         };
@@ -72,7 +72,7 @@ module.exports = {
           )
           .setTimestamp();
 
-        returnValue = {
+        return {
           data: {
             type: 4,
             data: {
@@ -82,6 +82,7 @@ module.exports = {
         };
       }
     }
-    return returnValue;
   },
 };
+
+export default help;
