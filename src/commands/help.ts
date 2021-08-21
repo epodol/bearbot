@@ -57,7 +57,7 @@ const help: Command = {
           })
           .catch(console.error);
       } else {
-        const help = new Discord.MessageEmbed()
+        const helpEmbed = new Discord.MessageEmbed()
           .setColor('#0099ff')
           .setTitle(`\`${command.name}\``)
           .setDescription(command.description)
@@ -65,7 +65,7 @@ const help: Command = {
 
         interaction
           .reply({
-            embeds: [help],
+            embeds: [helpEmbed],
             ephemeral: true,
           })
           .catch(console.error);

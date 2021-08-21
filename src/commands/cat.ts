@@ -68,11 +68,11 @@ const cat: Command = {
     const data: Cat[] = await fetchResponse.json();
 
     const catArray: Discord.MessageEmbed[] = [];
-    data.forEach((cat) => {
+    data.forEach((catData) => {
       const embed = new Discord.MessageEmbed()
         .setColor(process.env.BOT_COLOR as any)
         .setTitle('Cat Picture!')
-        .setImage(cat.url)
+        .setImage(catData.url)
         .setTimestamp();
       catArray.push(embed);
     });
