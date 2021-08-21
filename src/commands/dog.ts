@@ -61,7 +61,7 @@ const dog: Command = {
   ],
   async execute(interaction, args, author, commands, client) {
     const breed = args.getString('breed')?.toLowerCase();
-    const number = args.getNumber('number');
+    const number = args.getInteger('number');
 
     interface Dog {
       message: string[];
@@ -98,15 +98,11 @@ const dog: Command = {
       imageEmbeds.push(embed);
     });
 
-    const response = {
-      data: {
-        type: 4,
-        data: {
-          embeds: imageEmbeds,
-        },
-      },
-    };
-    return response;
+    interaction
+      .reply({
+        embeds: imageEmbeds,
+      })
+      .catch(console.error);
   },
 };
 

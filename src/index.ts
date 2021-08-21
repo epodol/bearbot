@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import * as fs from 'fs';
 import Discord, { ActivityType, ApplicationCommandData } from 'discord.js';
-import Command from './command';
+import Command, { Commands } from './command';
 
 dotenv.config({ path: 'config' });
 
@@ -16,42 +16,33 @@ const client = new Discord.Client({
   },
   intents: [],
 });
-const commands = new Discord.Collection() as Discord.Collection<
-  string,
-  Command
->;
 
-const commandFiles = fs
-  .readdirSync('commands')
-  .filter((file) => file.endsWith('.js'));
-
-for (const file of commandFiles) {
-  const command = require(`./commands/${file}`);
-  commands.set(command.name, command);
-}
-
-console.log(commands);
+const commands: Commands = {};
 
 if (process.env.BOT_COLOR === '') process.env.BOT_COLOR = '#0099ff';
 
 client.once('ready', async () => {
+  const files = fs.readdirSync(__dirname + '/commands');
+  for (const file of files) {
+    const command = require(`./commands/${file}`).default;
+    commands[command.name] = command;
+  }
+
   const newCommands: ApplicationCommandData[] = [];
 
-  commands.forEach((element) => {
+  for (const command in commands) {
     newCommands.push({
-      name: element.name,
-      description: element.description,
-      options: element.options,
+      name: commands[command].name,
+      description: commands[command].description,
+      options: commands[command].options,
     });
-  });
+  }
 
-  console.log(newCommands);
-
-  // Add Slash Commands to Dev Server
   if (
     process.env.DEV_SERVER_ID !== '' &&
     typeof process.env.DEV_SERVER_ID !== 'undefined'
   ) {
+    // Add Slash Commands to Dev Server
     client.guilds.cache
       .get(process.env.DEV_SERVER_ID)
       ?.commands.set(newCommands)
@@ -67,9 +58,7 @@ client.on('interactionCreate', async (interaction) => {
   if (!interaction.isCommand()) return;
 
   // Find command js file
-  const command = commands.get(
-    interaction.commandName.toLowerCase()
-  ) as Command;
+  const command = commands[interaction.commandName.toLowerCase()] as Command;
 
   // Execute command
   command.execute(
@@ -101,4 +90,4 @@ client.on('message', (message) => {
   return;
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.TOKEN).catch(console.error);

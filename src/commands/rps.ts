@@ -26,7 +26,7 @@ const rps: Command = {
       ],
     },
   ],
-  execute(interaction, args, author, commands) {
+  execute(interaction, args, author, commands, client) {
     const choice = args.getString('choice');
     let result: any = {};
     if (choice === 'rock') {

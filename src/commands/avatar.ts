@@ -1,3 +1,4 @@
+import { MessageEmbed, User } from 'discord.js';
 import Command from '../command';
 
 const avatar: Command = {
@@ -6,7 +7,7 @@ const avatar: Command = {
   options: [
     {
       name: 'user',
-      description: "Get the user's avatar by mentioning the user",
+      description: "Get the user's avatar by mentioning the user!",
       type: 1,
       options: [
         {
@@ -32,34 +33,40 @@ const avatar: Command = {
     },
   ],
   async execute(interaction, args, author, commands, client) {
-    // const user = await client.users
-    //   .fetch(args.getSubcommand('user') ptions[0].value)
-    //   .catch(console.error);
-    // if (user?.httpStatus === 404)
-    //   return {
-    //     data: {
-    //       type: 4,
-    //       data: {
-    //         content:
-    //           'Uh Oh! I couldn\'t find that user! Be sure to use the User\'s ID found by turning on developer mode, right clicking on the user, and selecting "Copy ID"',
-    //       },
-    //     },
-    //   };
-    // const avatarEmbed = new Discord.MessageEmbed()
-    //   .setColor(process.env.BOT_COLOR)
-    //   .setAuthor(`${user.username}'s Avatar`)
-    //   .setImage(
-    //     `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=256`
-    //   );
-    // const response = {
-    //   data: {
-    //     type: 4,
-    //     data: {
-    //       embeds: [avatarEmbed],
-    //     },
-    //   },
-    // };
-    // return response;
+    let user: User | void | null;
+    if (args.getSubcommand() === 'user') user = args.getUser('user');
+    else if (args.getSubcommand() === 'user-id') {
+      const userID = args.getString('uid');
+      if (userID === null) {
+        return interaction.reply({
+          ephemeral: true,
+          content: 'User not found',
+        });
+      }
+      user = await client.users.fetch(userID).catch((err) => {
+        return interaction.reply({
+          ephemeral: true,
+          content: "I couldn't find that user.",
+        });
+      });
+    }
+
+    if (!user) {
+      return interaction.reply({
+        ephemeral: true,
+        content: "I couldn't find that user.",
+      });
+    }
+
+    const avatarEmbed = new MessageEmbed()
+      .setColor(process.env.BOT_COLOR as any)
+      .setAuthor(`${user.username}'s Avatar`)
+      .setImage(user.displayAvatarURL({ dynamic: true }));
+    interaction
+      .reply({
+        embeds: [avatarEmbed],
+      })
+      .catch(console.error);
   },
 };
 

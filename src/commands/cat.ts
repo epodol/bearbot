@@ -54,8 +54,8 @@ const cat: Command = {
       ],
     },
   ],
-  async execute(interaction, args, author, commands) {
-    const number = args.getNumber('number');
+  async execute(interaction, args, author, commands, client) {
+    const number = args.getInteger('number');
 
     interface Cat {
       url: string;
@@ -77,15 +77,11 @@ const cat: Command = {
       catArray.push(embed);
     });
 
-    const response = {
-      data: {
-        type: 4,
-        data: {
-          embeds: catArray,
-        },
-      },
-    };
-    return response;
+    interaction
+      .reply({
+        embeds: catArray,
+      })
+      .catch(console.error);
   },
 };
 

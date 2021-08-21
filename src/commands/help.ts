@@ -12,8 +12,8 @@ const help: Command = {
       required: false,
     },
   ],
-  async execute(interaction, args, author, commands) {
-    if (args.getString('command') === undefined) {
+  async execute(interaction, args, author, commands, client) {
+    if (args.getString('command') === null) {
       const commandList = new Discord.MessageEmbed()
         .setColor(process.env.BOT_COLOR as any)
         .setTitle(`Bear Commands!`)
@@ -21,65 +21,54 @@ const help: Command = {
           `Want to suggest a command? Go to https://github.com/epodol/bearbot/issues/new`
         )
         .setTimestamp();
-      commands.map((command: Command) =>
-        commandList.addField(`\`${command.name}\``, command.description, false)
-      );
 
-      return {
-        data: {
-          type: 4,
-          data: {
-            embeds: [commandList],
-          },
-        },
-      };
+      for (const [key, value] of Object.entries(commands)) {
+        commandList.addField(`\`${value.name}\``, value.description, false);
+      }
+
+      interaction
+        .reply({
+          embeds: [commandList],
+          ephemeral: true,
+        })
+        .catch(console.error);
     } else {
       const name = args.getString('command')?.toLowerCase();
-      const command =
-        commands.get(name) ||
-        commands.find((c: any) => c.aliases && c.aliases.includes(name));
+      if (typeof name === 'undefined') {
+        return interaction
+          .reply({
+            content: `The command \`${args.getString(
+              'command'
+            )}\` does not exist!`,
+            ephemeral: true,
+          })
+          .catch(console.error);
+        // End
+      }
+      const command = commands[name];
 
       if (!command) {
-        return {
-          data: {
-            type: 4,
-            data: {
-              content: `The command \`${args.getString(
-                'command'
-              )}\` does not exist!`,
-            },
-          },
-        };
+        interaction
+          .reply({
+            content: `The command \`${args.getString(
+              'command'
+            )}\` does not exist!`,
+            ephemeral: true,
+          })
+          .catch(console.error);
       } else {
         const help = new Discord.MessageEmbed()
           .setColor('#0099ff')
           .setTitle(`\`${command.name}\``)
           .setDescription(command.description)
-          .addFields(
-            {
-              name: 'Server Only?',
-              value: command.guildOnly ? 'Yes' : 'No',
-              inline: true,
-            },
-            {
-              name: 'Permissions?',
-              value:
-                typeof command?.permissions === 'object'
-                  ? `\`${command.permissions.join('` `')}\``
-                  : 'None!',
-              inline: true,
-            }
-          )
           .setTimestamp();
 
-        return {
-          data: {
-            type: 4,
-            data: {
-              embeds: [help],
-            },
-          },
-        };
+        interaction
+          .reply({
+            embeds: [help],
+            ephemeral: true,
+          })
+          .catch(console.error);
       }
     }
   },

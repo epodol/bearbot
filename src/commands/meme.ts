@@ -73,9 +73,9 @@ const meme: Command = {
       ],
     },
   ],
-  async execute(interaction, args, author, commands) {
+  async execute(interaction, args, author, commands, client) {
     const source = args.getString('source') || 'memes';
-    const number = args.getNumber('number') || 1;
+    const number = args.getInteger('number') || 1;
 
     const fetchResponse = await fetch(
       `https://meme-api.herokuapp.com/gimme/${source || 'memes'}/${number || 1}`
@@ -85,14 +85,12 @@ const meme: Command = {
     const memeArray: MessageEmbed[] = [];
     while (memeArray.length < count) {
       if (memes[memeArray.length].nsfw)
-        return {
-          data: {
-            type: 4,
-            data: {
-              content: 'Uh oh! This meme is NSFW.',
-            },
-          },
-        };
+        return interaction
+          .reply({
+            content: 'Uh oh! This meme is NSFW.',
+            ephemeral: true,
+          })
+          .catch(console.error);
       const memeEmbed = new Discord.MessageEmbed()
         .setColor(process.env.BOT_COLOR as any)
         .setTitle(memes[memeArray.length].title)
@@ -108,15 +106,11 @@ const meme: Command = {
       memeArray.push(memeEmbed);
     }
 
-    const response = {
-      data: {
-        type: 4,
-        data: {
-          embeds: memeArray,
-        },
-      },
-    };
-    return response;
+    interaction
+      .reply({
+        embeds: memeArray,
+      })
+      .catch(console.error);
   },
 };
 

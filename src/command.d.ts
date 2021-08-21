@@ -7,6 +7,9 @@ import {
   ApplicationCommandOptionData,
 } from 'discord.js';
 
+export interface Commands {
+  [key: string]: Command;
+}
 export default interface Command {
   name: string;
   description: string;
@@ -15,7 +18,7 @@ export default interface Command {
     interaction: CommandInteraction,
     args: CommandInteractionOptionResolver,
     author: GuildMember | APIInteractionGuildMember | null,
-    commands: any,
+    commands: Commands,
     client: Client
   ) => void;
 }
