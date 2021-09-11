@@ -7,10 +7,11 @@
     ".": "./dist/index.js"
   },
   "scripts": {
-    "start": "rm -rf ./dist/ && tsc && npm-run-all --parallel start:node tsc:watch",
-    "start:node": "node --no-warnings .",
+    "start": "rm -rf ./dist/ && tsc && npm-run-all --parallel node tsc",
+    "watch": "rm -rf ./dist/ && tsc && npm-run-all --parallel node tsc:watch",
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
+    "node": "node --no-warnings .",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint .",
     "prettier": "prettier --check .",
