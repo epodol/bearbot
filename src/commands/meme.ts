@@ -80,7 +80,7 @@ const meme: Command = {
     const fetchResponse = await fetch(
       `https://meme-api.herokuapp.com/gimme/${source || 'memes'}/${number || 1}`
     );
-    const { count, memes } = await fetchResponse.json();
+    const { count, memes } = (await fetchResponse.json()) as any;
 
     const memeArray: MessageEmbed[] = [];
     while (memeArray.length < count) {

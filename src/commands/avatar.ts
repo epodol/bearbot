@@ -60,7 +60,7 @@ const avatar: Command = {
 
     const avatarEmbed = new MessageEmbed()
       .setColor(process.env.BOT_COLOR as any)
-      .setAuthor(`${user.username}'s Avatar`)
+      .setTitle(`${user.username}'s Avatar`)
       .setImage(user.displayAvatarURL({ dynamic: true }));
     interaction
       .reply({

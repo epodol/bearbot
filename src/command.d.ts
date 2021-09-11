@@ -1,11 +1,11 @@
 import {
   CommandInteractionOptionResolver,
-  APIInteractionGuildMember,
   GuildMember,
   CommandInteraction,
   Client,
   ApplicationCommandOptionData,
 } from 'discord.js';
+import { APIInteractionGuildMember } from 'discord-api-types/v9';
 
 export interface Commands {
   [key: string]: Command;

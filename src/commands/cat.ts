@@ -65,7 +65,7 @@ const cat: Command = {
     const fetchResponse = await fetch(
       `https://api.thecatapi.com/v1/images/search?limit=${number || '1'}`
     );
-    const data: Cat[] = await fetchResponse.json();
+    const data: Cat[] = (await fetchResponse.json()) as any;
 
     const catArray: Discord.MessageEmbed[] = [];
     data.forEach((catData) => {

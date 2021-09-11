@@ -74,7 +74,7 @@ const dog: Command = {
 
     const image = await fetch(url);
 
-    const res: Dog = await image.json();
+    const res: Dog = (await image.json()) as any;
 
     if (res?.status === 'error') {
       const response = {

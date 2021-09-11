@@ -2,6 +2,11 @@ import dotenv from 'dotenv';
 import * as fs from 'fs';
 import Discord, { ActivityType, ApplicationCommandData } from 'discord.js';
 import Command, { Commands } from './command';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config({ path: 'config' });
 
@@ -24,7 +29,7 @@ if (process.env.BOT_COLOR === '') process.env.BOT_COLOR = '#0099ff';
 client.once('ready', async () => {
   const files = fs.readdirSync(__dirname + '/commands');
   for (const file of files) {
-    const command = require(`./commands/${file}`).default;
+    const command = (await import(`./commands/${file}`)).default;
     commands[command.name] = command;
   }
 
