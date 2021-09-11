@@ -10,6 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/**/*", "./.eslintrc.js"],
+  "include": ["./src/**/*", ".eslintrc.json"],
   "exclude": ["node_modules", "dist", "build"]
 }
