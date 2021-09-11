@@ -1,14 +1,14 @@
-/* eslint-disable default-case */
-const Discord = require('discord.js');
+import Discord from 'discord.js';
+import Command from '../command';
 
-module.exports = {
+const rps: Command = {
   name: 'rps',
   description: 'Plays rock paper scissors.',
   options: [
     {
       name: 'choice',
       description: 'Rock, Paper, or Scissors',
-      type: 3,
+      type: 'STRING',
       required: true,
       choices: [
         {
@@ -26,9 +26,10 @@ module.exports = {
       ],
     },
   ],
-  execute(args) {
-    let result = {};
-    if (args[0].value === 'rock') {
+  execute(interaction, args, author, commands, client) {
+    const choice = args.getString('choice');
+    let result: any = {};
+    if (choice === 'rock') {
       switch (Math.floor(Math.random() * 3)) {
         case 0:
           result = { uc: 'Rock', cc: 'Rock', r: 1 };
@@ -41,7 +42,7 @@ module.exports = {
           break;
       }
     }
-    if (args[0].value === 'paper') {
+    if (choice === 'paper') {
       switch (Math.floor(Math.random() * 3)) {
         case 0:
           result = { uc: 'Paper', cc: 'Rock', r: 0 };
@@ -54,7 +55,7 @@ module.exports = {
           break;
       }
     }
-    if (args[0].value === 'scissors') {
+    if (choice === 'scissors') {
       switch (Math.floor(Math.random() * 3)) {
         case 0:
           result = { uc: 'Scissors', cc: 'Rock', r: 2 };
@@ -88,7 +89,7 @@ module.exports = {
     }
 
     const resultEmbed = new Discord.MessageEmbed()
-      .setColor(color)
+      .setColor(color as any)
       .setTitle('Rock Paper Scissors!')
       .setDescription(resultString)
       .addFields(
@@ -97,14 +98,10 @@ module.exports = {
       )
       .setTimestamp();
 
-    const response = {
-      data: {
-        type: 4,
-        data: {
-          embeds: [resultEmbed],
-        },
-      },
-    };
-    return response;
+    interaction.reply({
+      embeds: [resultEmbed],
+    });
   },
 };
+
+export default rps;
